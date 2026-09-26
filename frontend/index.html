@@ -55,8 +55,19 @@
   <!-- Ingestion Preset & Framework Selector Toolbar -->
   <section class="toolbar-section">
     <div class="toolbar-container">
-      <div class="preset-selector-group">
-        <span class="group-label">Quick Vendor Presets:</span>
+      
+      <!-- Row 1: Quick Vendor Presets -->
+      <div class="toolbar-row">
+        <div class="toolbar-label-col">
+          <svg class="toolbar-label-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="20" height="8" x="2" y="2" rx="2" ry="2"/>
+            <rect width="20" height="8" x="2" y="14" rx="2" ry="2"/>
+            <line x1="6" x2="6.01" y1="6" y2="6"/>
+            <line x1="6" x2="6.01" y1="18" y2="18"/>
+          </svg>
+          <span class="toolbar-label-text">Quick Vendor Presets:</span>
+        </div>
+        <div class="toolbar-divider"></div>
         <div class="preset-buttons" id="preset-buttons">
           <button class="preset-btn active" data-preset="cisco">Cisco Catalyst (IOS-XE)</button>
           <button class="preset-btn" data-preset="juniper">Juniper SRX (JunOS)</button>
@@ -69,13 +80,24 @@
         </div>
       </div>
 
-      <div class="framework-selector-group">
-        <span class="group-label">Evaluated Frameworks:</span>
-        <label class="framework-checkbox"><input type="checkbox" value="CIS" checked> CIS Benchmarks v2.0</label>
-        <label class="framework-checkbox"><input type="checkbox" value="NIST" checked> NIST CSF 2.0</label>
-        <label class="framework-checkbox"><input type="checkbox" value="DISA_STIG" checked> DISA STIGs</label>
-        <label class="framework-checkbox"><input type="checkbox" value="ISO_27001" checked> ISO/IEC 27001</label>
+      <!-- Row 2: Evaluated Frameworks -->
+      <div class="toolbar-row">
+        <div class="toolbar-label-col">
+          <svg class="toolbar-label-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+          <span class="toolbar-label-text">Evaluated Frameworks:</span>
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="framework-selector-group">
+          <label class="framework-checkbox"><input type="checkbox" value="CIS" checked> CIS Benchmarks v2.0</label>
+          <label class="framework-checkbox"><input type="checkbox" value="NIST" checked> NIST CSF 2.0</label>
+          <label class="framework-checkbox"><input type="checkbox" value="DISA_STIG" checked> DISA STIGs</label>
+          <label class="framework-checkbox"><input type="checkbox" value="ISO_27001" checked> ISO/IEC 27001</label>
+        </div>
       </div>
+
     </div>
   </section>
 
