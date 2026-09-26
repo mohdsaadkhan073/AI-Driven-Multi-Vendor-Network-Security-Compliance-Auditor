@@ -145,7 +145,7 @@ SAMPLES = {
     },
     "whitebox": {
         "id": "whitebox",
-        "name": "Whitebox SONiC Switch (Adaptive Demo ⭐)",
+        "name": "Whitebox SONiC Switch (Adaptive Mode)",
         "vendor": "Whitebox / SONiC",
         "config": WHITEBOX_SAMPLE,
         "description": "Modern disaggregated whitebox hardware with novel, uncatalogued syntax designed to test the Adaptive Training Loop."

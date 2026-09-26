@@ -6,7 +6,7 @@ let currentAuditResult = null;
 let sampleConfigs = {};
 let activeVendor = "Cisco";
 let currentFilter = "ALL";
-
+let isDraggingResizer = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   initApp();
@@ -14,11 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function initApp() {
   bindEvents();
+  initResizer();
+  initFullscreen();
   await loadSamples();
   await loadLearnedRules();
   
   // Auto-run audit on initial preset
-  await triggerAudit();
+  await triggerAudit(false);
 }
 
 function bindEvents() {
@@ -37,7 +39,7 @@ function bindEvents() {
   });
 
   // Action Buttons
-  document.getElementById("btn-run-audit").addEventListener("click", triggerAudit);
+  document.getElementById("btn-run-audit").addEventListener("click", () => triggerAudit(true));
   document.getElementById("btn-simulate-fix").addEventListener("click", triggerSimulateFix);
   document.getElementById("btn-export-pdf").addEventListener("click", triggerExportPdf);
   document.getElementById("btn-clear-config").addEventListener("click", () => {
@@ -47,7 +49,7 @@ function bindEvents() {
 
   // Framework Checkboxes
   document.querySelectorAll(".framework-checkbox input").forEach(cb => {
-    cb.addEventListener("change", triggerAudit);
+    cb.addEventListener("change", () => triggerAudit(true));
   });
 
   // Tabs
@@ -77,7 +79,78 @@ function bindEvents() {
   document.getElementById("btn-submit-teach").addEventListener("click", submitTeachRule);
 }
 
-// Line numbering
+// -------------------------------------------------------------
+// Resizable Panel & Fullscreen Controller
+// -------------------------------------------------------------
+function initResizer() {
+  const resizer = document.getElementById("panel-resizer");
+  const container = document.getElementById("workstation-container");
+
+  if (!resizer || !container) return;
+
+  resizer.addEventListener("mousedown", (e) => {
+    isDraggingResizer = true;
+    resizer.classList.add("dragging");
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!isDraggingResizer) return;
+    const containerRect = container.getBoundingClientRect();
+    const minWidth = 320;
+    const maxWidth = containerRect.width * 0.75;
+    let newWidth = e.clientX - containerRect.left;
+    if (newWidth < minWidth) newWidth = minWidth;
+    if (newWidth > maxWidth) newWidth = maxWidth;
+
+    container.style.setProperty("--config-panel-width", `${newWidth}px`);
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (isDraggingResizer) {
+      isDraggingResizer = false;
+      resizer.classList.remove("dragging");
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    }
+  });
+}
+
+function initFullscreen() {
+  const btn = document.getElementById("btn-fullscreen-editor");
+  const panel = document.getElementById("config-panel");
+  if (!btn || !panel) return;
+
+  const iconMax = btn.querySelector(".icon-maximize");
+  const iconMin = btn.querySelector(".icon-minimize");
+
+  btn.addEventListener("click", () => {
+    const isFull = panel.classList.toggle("fullscreen");
+    if (isFull) {
+      iconMax.style.display = "none";
+      iconMin.style.display = "block";
+      btn.title = "Exit Fullscreen (Esc)";
+    } else {
+      iconMax.style.display = "block";
+      iconMin.style.display = "none";
+      btn.title = "Toggle Fullscreen View";
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && panel.classList.contains("fullscreen")) {
+      panel.classList.remove("fullscreen");
+      iconMax.style.display = "block";
+      iconMin.style.display = "none";
+      btn.title = "Toggle Fullscreen View";
+    }
+  });
+}
+
+// -------------------------------------------------------------
+// Line Numbering & Scrolling
+// -------------------------------------------------------------
 function updateLineNumbers() {
   const editor = document.getElementById("raw-config-editor");
   const lineBox = document.getElementById("line-numbers");
@@ -87,7 +160,7 @@ function updateLineNumbers() {
     nums += i + "\n";
   }
   lineBox.innerText = nums;
-  document.getElementById("meta-lines").innerText = `Lines: ${lines}`;
+  document.getElementById("meta-lines").innerText = `${lines} Lines`;
 }
 
 function syncLineScroll() {
@@ -96,7 +169,9 @@ function syncLineScroll() {
   lineBox.scrollTop = editor.scrollTop;
 }
 
-// Samples loader
+// -------------------------------------------------------------
+// Samples Loader & Preset Switching
+// -------------------------------------------------------------
 async function loadSamples() {
   try {
     const res = await fetch(`${API_BASE}/api/samples`);
@@ -112,10 +187,10 @@ function loadPreset(key) {
     const sample = sampleConfigs[key];
     activeVendor = sample.vendor;
     document.getElementById("raw-config-editor").value = sample.config;
-    document.getElementById("meta-vendor").innerText = `Vendor: ${sample.vendor}`;
-    document.getElementById("meta-model").innerText = `Model: ${sample.name.split("(")[0].trim()}`;
+    document.getElementById("meta-vendor").innerText = sample.vendor;
+    document.getElementById("meta-model").innerText = sample.name.split("(")[0].trim();
     updateLineNumbers();
-    triggerAudit();
+    triggerAudit(true);
   }
 }
 
@@ -127,17 +202,48 @@ function getSelectedFrameworks() {
   return selected;
 }
 
-// Execute Audit
-async function triggerAudit() {
+// -------------------------------------------------------------
+// High-Tech Animated Audit Execution
+// -------------------------------------------------------------
+async function triggerAudit(showAnimation = true) {
   const rawConfig = document.getElementById("raw-config-editor").value;
   if (!rawConfig.trim()) {
     showToast("Editor is empty. Paste a config or select a preset.");
     return;
   }
 
+  const btnAudit = document.getElementById("btn-run-audit");
+  const laser = document.getElementById("scanner-laser");
   const frameworks = getSelectedFrameworks();
+
+  if (showAnimation) {
+    // 1. Scanning State for Button
+    btnAudit.disabled = true;
+    btnAudit.innerHTML = `
+      <svg class="animate-spin" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+      Scanning Baseline...
+    `;
+
+    // 2. Trigger Optical Scanner Laser Sweep
+    if (laser) {
+      laser.classList.remove("active");
+      void laser.offsetWidth; // force reflow
+      laser.classList.add("active");
+    }
+
+    // 3. Reset Gauge momentarily to build anticipation
+    const progressBar = document.getElementById("gauge-progress-bar");
+    if (progressBar) {
+      progressBar.style.strokeDashoffset = "251.327";
+    }
+  }
   
   try {
+    // Delay slightly to let the scan sweep play across the code editor
+    if (showAnimation) {
+      await new Promise(r => setTimeout(r, 650));
+    }
+
     const res = await fetch(`${API_BASE}/api/audit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -150,18 +256,34 @@ async function triggerAudit() {
 
     if (!res.ok) throw new Error("Audit failed");
     currentAuditResult = await res.json();
-    renderAuditResults(currentAuditResult);
-    showToast("Audit completed successfully!");
+    renderAuditResults(currentAuditResult, showAnimation);
+    if (showAnimation) {
+      showToast("Security baseline audit completed.");
+    }
   } catch (err) {
     console.error("Audit error:", err);
     showToast("Error running audit: " + err.message);
+  } finally {
+    if (showAnimation) {
+      btnAudit.disabled = false;
+      btnAudit.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        Run Security Audit
+      `;
+    }
   }
 }
 
-// Simulate 1-Click Fix
 async function triggerSimulateFix() {
   const rawConfig = document.getElementById("raw-config-editor").value;
   const frameworks = getSelectedFrameworks();
+  const btnFix = document.getElementById("btn-simulate-fix");
+
+  btnFix.disabled = true;
+  btnFix.innerHTML = `
+    <svg class="animate-spin" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+    Synthesizing CLI Hardening...
+  `;
 
   try {
     const res = await fetch(`${API_BASE}/api/simulate-fix`, {
@@ -181,25 +303,61 @@ async function triggerSimulateFix() {
     document.getElementById("raw-config-editor").value = data.hardened_config;
     updateLineNumbers();
     
-    // Update audit results
+    // Update audit results with animated score jump
     currentAuditResult = data.audit_result;
-    renderAuditResults(currentAuditResult);
-    showToast("Auto-Remediation Applied! Compliance increased!");
+    renderAuditResults(currentAuditResult, true);
+    showToast("Auto-remediation applied. Compliance score boosted.");
   } catch (err) {
     console.error("Simulation error:", err);
     showToast("Simulation error: " + err.message);
+  } finally {
+    btnFix.disabled = false;
+    btnFix.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Simulate Auto-Fix
+    `;
   }
 }
 
-// Render Results
-function renderAuditResults(res) {
-  // 1. Overall Score Circle
+// -------------------------------------------------------------
+// Render Results with Smooth Ticking Counter & Gauge Animation
+// -------------------------------------------------------------
+function renderAuditResults(res, animate = false) {
   const score = res.overall_compliance_score;
-  const circle = document.getElementById("overall-score-circle");
+  const progressBar = document.getElementById("gauge-progress-bar");
   const scoreVal = document.getElementById("overall-score-val");
   
-  scoreVal.innerText = `${score}%`;
-  circle.className = "score-circle " + (score >= 80 ? "green" : score >= 50 ? "amber" : "red");
+  // Circumference for r=40 is 251.327
+  const circumference = 251.327;
+  const targetOffset = circumference * (1 - (score / 100));
+  
+  // Smooth number counter animation
+  if (animate) {
+    let startVal = 0;
+    const duration = 750;
+    const startTime = performance.now();
+
+    function step(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      const currentVal = (easedProgress * score).toFixed(1);
+      scoreVal.innerText = `${currentVal}%`;
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        scoreVal.innerText = `${score}%`;
+      }
+    }
+    requestAnimationFrame(step);
+  } else {
+    scoreVal.innerText = `${score}%`;
+  }
+
+  progressBar.style.strokeDashoffset = targetOffset;
+  progressBar.setAttribute("class", "gauge-progress " + (score >= 80 ? "green" : score >= 50 ? "amber" : "red"));
 
   // Metrics
   const passed = res.findings.filter(f => f.status === "PASS").length;
@@ -212,16 +370,16 @@ function renderAuditResults(res) {
   document.getElementById("findings-count-badge").innerText = res.findings.length;
   document.getElementById("gaps-count-badge").innerText = res.unrecognized_gaps.length;
 
-  // 2. Frameworks Progress Grid
+  // Frameworks Progress Grid
   renderFrameworksGrid(res.framework_scores);
 
-  // 3. Findings List
+  // Findings List (with cascading delays)
   renderFindings();
 
-  // 4. CSM JSON Viewer
+  // CSM JSON Viewer
   document.getElementById("csm-json-viewer").innerText = JSON.stringify(res.csm, null, 2);
 
-  // 5. Adaptive Gaps
+  // Adaptive Gaps
   renderAdaptiveGaps(res.unrecognized_gaps);
 }
 
@@ -264,13 +422,15 @@ function renderFindings() {
   document.getElementById("findings-summary-text").innerText = `Showing ${filtered.length} of ${currentAuditResult.findings.length} findings`;
 
   if (filtered.length === 0) {
-    list.innerHTML = `<div style="text-align: center; color: #64748B; padding: 24px;">No findings match the selected filter.</div>`;
+    list.innerHTML = `<div style="text-align: center; color: #64748B; padding: 24px; font-size: 0.82rem;">No findings match the selected filter.</div>`;
     return;
   }
 
-  filtered.forEach(f => {
+  filtered.forEach((f, idx) => {
     const card = document.createElement("div");
     card.className = `finding-card ${f.status.toLowerCase()}`;
+    // Staggered cascade animation delay
+    card.style.animationDelay = `${Math.min(idx * 35, 400)}ms`;
 
     let remediationHtml = "";
     if (f.status !== "PASS") {
@@ -318,7 +478,7 @@ function renderAdaptiveGaps(gaps) {
 
   if (!gaps || gaps.length === 0) {
     container.innerHTML = `
-      <div style="background: white; border: 1px dashed #CBD5E1; padding: 16px; border-radius: 8px; text-align: center; color: #64748B; font-size: 0.8rem;">
+      <div style="background: white; border: 1px dashed #CBD5E1; padding: 16px; border-radius: 8px; text-align: center; color: #64748B; font-size: 0.78rem;">
         No unrecognized syntax gaps found in this configuration. The engine fully understands all command tokens.
       </div>
     `;
@@ -333,7 +493,7 @@ function renderAdaptiveGaps(gaps) {
         <span class="gap-line">Line ${gap.line}: ${escapeHtml(gap.raw_text)}</span>
         <span class="gap-sub">Detected Keywords: ${gap.keywords.join(", ")} | Suggested Mapping: <strong>${gap.suggested_parameter}</strong></span>
       </div>
-      <button class="btn btn-secondary" style="font-size: 0.75rem;" onclick="openTeachModal('${gap.raw_text}', '${gap.suggested_parameter}', '${gap.suggested_value}')">
+      <button class="btn btn-secondary" style="font-size: 0.74rem;" onclick="openTeachModal('${gap.raw_text}', '${gap.suggested_parameter}', '${gap.suggested_value}')">
         Map Syntax
       </button>
     `;
@@ -365,7 +525,9 @@ async function loadLearnedRules() {
   }
 }
 
-// Modal handling
+// -------------------------------------------------------------
+// Modal Handling & Submission
+// -------------------------------------------------------------
 function openTeachModal(rawCommand, suggestedParam, suggestedVal) {
   document.getElementById("modal-vendor").value = activeVendor;
   document.getElementById("modal-command").value = rawCommand;
@@ -399,15 +561,17 @@ async function submitTeachRule() {
 
     if (!res.ok) throw new Error("Teaching rule failed");
     closeModal();
-    showToast("New syntax rule learned! Re-evaluating compliance...");
+    showToast("New syntax rule learned. Re-evaluating compliance...");
     await loadLearnedRules();
-    await triggerAudit();
+    await triggerAudit(true);
   } catch (err) {
     showToast("Error teaching rule: " + err.message);
   }
 }
 
-// PDF Export
+// -------------------------------------------------------------
+// PDF Report Export
+// -------------------------------------------------------------
 async function triggerExportPdf() {
   if (!currentAuditResult) {
     showToast("Run an audit first before exporting PDF.");
@@ -431,20 +595,24 @@ async function triggerExportPdf() {
     document.body.appendChild(a);
     a.click();
     a.remove();
-    showToast("PDF report downloaded!");
+    showToast("PDF report downloaded.");
   } catch (err) {
     console.error("PDF export error:", err);
     showToast("PDF export error: " + err.message);
   }
 }
 
-// Helper utilities
-function copyCode(btn, code) {
+// -------------------------------------------------------------
+// Utilities
+// -------------------------------------------------------------
+window.copyCode = function(btn, code) {
   navigator.clipboard.writeText(code);
   const orig = btn.innerText;
   btn.innerText = "Copied!";
   setTimeout(() => { btn.innerText = orig; }, 1800);
-}
+};
+
+window.openTeachModal = openTeachModal;
 
 function showToast(msg) {
   const toast = document.getElementById("toast-message");
@@ -452,7 +620,7 @@ function showToast(msg) {
   toast.classList.add("show");
   setTimeout(() => {
     toast.classList.remove("show");
-  }, 2600);
+  }, 2400);
 }
 
 function escapeHtml(str) {
