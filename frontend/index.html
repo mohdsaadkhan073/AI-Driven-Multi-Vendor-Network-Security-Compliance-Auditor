@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EliteCore Network Security Compliance Auditor | Smart India Hackathon 2026-27</title>
+  <meta name="description" content="AI-Augmented, Vendor-Agnostic Multi-Framework Network Security Compliance Auditor with Adaptive Learning Loop.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/styles.css">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="brand-badge">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">EliteCore Auditor</div>
+          <div class="brand-sub">AI-Augmented Network Security Compliance Engine</div>
+        </div>
+      </div>
+      <div class="sih-pill">
+        <span class="sih-dot"></span> Smart India Hackathon 2026-27
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="engine-status">
+        <span class="pulse-indicator"></span> Normalization Core Active
+      </div>
+      <button id="btn-export-pdf" class="btn btn-secondary" title="Download Executive Audit Report PDF">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export PDF Report
+      </button>
+      <button id="btn-simulate-fix" class="btn btn-accent" title="Simulate 1-Click Remediation & Recalculate Compliance">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Simulate Auto-Fix
+      </button>
+      <button id="btn-run-audit" class="btn btn-primary" title="Execute Multi-Framework Audit">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        Run Security Audit
+      </button>
+    </div>
+  </header>
+
+  <!-- Ingestion Preset & Framework Selector Toolbar -->
+  <section class="toolbar-section">
+    <div class="toolbar-container">
+      <div class="preset-selector-group">
+        <span class="group-label">Quick Vendor Presets:</span>
+        <div class="preset-buttons" id="preset-buttons">
+          <button class="preset-btn active" data-preset="cisco">Cisco Catalyst (IOS-XE)</button>
+          <button class="preset-btn" data-preset="juniper">Juniper SRX (JunOS)</button>
+          <button class="preset-btn" data-preset="fortinet">Fortinet FortiGate (FortiOS)</button>
+          <button class="preset-btn" data-preset="paloalto">Palo Alto (PAN-OS)</button>
+          <button class="preset-btn special" data-preset="whitebox">WhiteBox Switch (Adaptive Demo ⭐)</button>
+        </div>
+      </div>
+
+      <div class="framework-selector-group">
+        <span class="group-label">Evaluated Frameworks:</span>
+        <label class="framework-checkbox"><input type="checkbox" value="CIS" checked> CIS Benchmarks v2.0</label>
+        <label class="framework-checkbox"><input type="checkbox" value="NIST" checked> NIST CSF 2.0</label>
+        <label class="framework-checkbox"><input type="checkbox" value="DISA_STIG" checked> DISA STIGs</label>
+        <label class="framework-checkbox"><input type="checkbox" value="ISO_27001" checked> ISO/IEC 27001</label>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Workstation Layout -->
+  <main class="workstation-container">
+    
+    <!-- Left Column: Raw Configuration Workspace -->
+    <section class="config-panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Ingested Raw Configuration
+        </div>
+        <div class="device-meta-badges">
+          <span class="meta-tag" id="meta-vendor">Vendor: Cisco</span>
+          <span class="meta-tag" id="meta-model">Model: Catalyst 9300</span>
+          <span class="meta-tag" id="meta-lines">Lines: 35</span>
+        </div>
+      </div>
+
+      <div class="config-editor-wrapper">
+        <div class="line-numbers" id="line-numbers"></div>
+        <textarea id="raw-config-editor" spellcheck="false" placeholder="Paste network CLI configuration here..."></textarea>
+      </div>
+
+      <div class="editor-footer">
+        <div class="footer-hint">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Supports Cisco, Juniper, Fortinet, Palo Alto, Arista, and Disaggregated SONiC.
+        </div>
+        <button id="btn-clear-config" class="btn-text">Clear Editor</button>
+      </div>
+    </section>
+
+    <!-- Right Column: Audit Results & Adaptive Loop -->
+    <section class="results-panel">
+      
+      <!-- Executive Overview Card -->
+      <div class="executive-score-card">
+        <div class="score-circle-wrapper">
+          <div class="score-circle" id="overall-score-circle">
+            <span class="score-val" id="overall-score-val">0%</span>
+            <span class="score-lbl">Compliance</span>
+          </div>
+        </div>
+
+        <div class="score-metrics-grid">
+          <div class="metric-box">
+            <div class="metric-val text-green" id="passed-count">0</div>
+            <div class="metric-lbl">Passed Controls</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val text-red" id="critical-count">0</div>
+            <div class="metric-lbl">Critical Gaps</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val text-orange" id="high-count">0</div>
+            <div class="metric-lbl">High Severity</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-val text-blue" id="remediation-coverage">100%</div>
+            <div class="metric-lbl">Fixes Synthesized</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Framework Progress Bars Grid -->
+      <div class="frameworks-progress-grid" id="frameworks-progress-container">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Interactive Tabbed Results -->
+      <div class="tabs-header">
+        <button class="tab-btn active" data-tab="tab-findings">
+          Actionable Findings (<span id="findings-count-badge">0</span>)
+        </button>
+        <button class="tab-btn" data-tab="tab-csm">
+          Common Security Model (CSM)
+        </button>
+        <button class="tab-btn highlight" data-tab="tab-adaptive">
+          Adaptive Training Studio <span class="gap-count-pill" id="gaps-count-badge">0</span>
+        </button>
+      </div>
+
+      <div class="tab-content-container">
+        
+        <!-- Tab 1: Findings & Remediation -->
+        <div class="tab-pane active" id="tab-findings">
+          <div class="findings-filter-bar">
+            <div class="filter-left">
+              <span class="filter-label">Filter:</span>
+              <button class="filter-pill active" data-filter="ALL">All</button>
+              <button class="filter-pill" data-filter="FAIL">Failed Only</button>
+              <button class="filter-pill" data-filter="CRITICAL">Critical Only</button>
+              <button class="filter-pill" data-filter="PASS">Passed Only</button>
+            </div>
+            <div class="filter-right" id="findings-summary-text">
+              Showing all findings
+            </div>
+          </div>
+          <div class="findings-list" id="findings-list">
+            <!-- Findings cards rendered here -->
+          </div>
+        </div>
+
+        <!-- Tab 2: Common Security Model (CSM) -->
+        <div class="tab-pane" id="tab-csm">
+          <div class="csm-banner">
+            <div>
+              <strong>Vendor-Agnostic Normalization Schema:</strong> Proprietary vendor commands are mapped into this unified security model, isolating syntax from security semantics.
+            </div>
+          </div>
+          <pre class="csm-code-viewer" id="csm-json-viewer"></pre>
+        </div>
+
+        <!-- Tab 3: Adaptive Training Studio -->
+        <div class="tab-pane" id="tab-adaptive">
+          <div class="adaptive-banner">
+            <div class="adaptive-banner-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
+            </div>
+            <div>
+              <div class="adaptive-banner-title">Human-in-the-Loop Dynamic Learning Engine</div>
+              <div class="adaptive-banner-desc">When the parser encounters unfamiliar tokens from new firmware or custom whitebox switches, administrators map the parameter once. The engine updates its heuristics permanently without code deployment!</div>
+            </div>
+          </div>
+
+          <div class="adaptive-gaps-section">
+            <div class="section-title">Detected Syntax Gaps in Current Configuration:</div>
+            <div id="adaptive-gaps-list">
+              <!-- Unrecognized syntax items rendered here -->
+            </div>
+          </div>
+
+          <div class="learned-rules-section">
+            <div class="section-title">Active Learned Rules Knowledge Base:</div>
+            <div id="learned-rules-list">
+              <!-- Active learned rules rendered here -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Adaptive Training Modal -->
+  <div class="modal-backdrop" id="teach-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">Teach Compliance Engine New Syntax</div>
+        <button class="modal-close" id="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">Map the unrecognized command line to its corresponding standard parameter in the Common Security Model (CSM):</p>
+        
+        <div class="form-group">
+          <label>Target Vendor Family:</label>
+          <input type="text" id="modal-vendor" class="form-input" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Raw Command String:</label>
+          <input type="text" id="modal-command" class="form-input" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Target Common Security Parameter:</label>
+          <select id="modal-parameter" class="form-select">
+            <option value="inactivity_timeout_seconds">Inactivity Session Timeout (Seconds)</option>
+            <option value="ssh_version">SSH Protocol Version (2)</option>
+            <option value="telnet_disabled">Insecure Telnet Prohibition (True/False)</option>
+            <option value="login_banner_configured">Legal Login Warning Banner (True/False)</option>
+            <option value="logging_enabled">Centralized SIEM Syslog Forwarding (True/False)</option>
+            <option value="password_encryption_enabled">Password Encryption / Hash Enforcement (True/False)</option>
+            <option value="snmp_v3_enforced">SNMPv3 Enforcement (True/False)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Semantic Value to Map:</label>
+          <input type="text" id="modal-value" class="form-input" placeholder="e.g. 300, 2, or true">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+        <button class="btn btn-primary" id="btn-submit-teach">Save to Knowledge Base & Re-Audit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast-message"></div>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
