@@ -2,6 +2,12 @@
 
 const API_BASE = (import.meta.env && import.meta.env.VITE_API_URL) ? import.meta.env.VITE_API_URL.replace(/\/$/, "") : "";
 
+if (API_BASE) {
+  console.info(`[EliteCore Auditor] Connected to Backend API at: ${API_BASE}`);
+} else {
+  console.info(`[EliteCore Auditor] Running in Local Proxy Mode (/api -> http://127.0.0.1:8000)`);
+}
+
 let currentAuditResult = null;
 let sampleConfigs = {};
 let activeVendor = "Cisco";

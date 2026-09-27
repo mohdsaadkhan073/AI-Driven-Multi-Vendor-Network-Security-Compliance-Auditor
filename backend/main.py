@@ -19,9 +19,12 @@ app = FastAPI(
 )
 
 # Enable CORS for Vercel frontend cross-origin requests
+allowed_origins_env = os.environ.get("ALLOWED_ORIGINS", "*")
+allowed_origins = [orig.strip() for orig in allowed_origins_env.split(",")] if allowed_origins_env != "*" else ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -162,4 +165,5 @@ def export_pdf(audit_res: AuditResult):
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+    is_dev = os.environ.get("ENVIRONMENT", "development").lower() != "production"
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=is_dev)
