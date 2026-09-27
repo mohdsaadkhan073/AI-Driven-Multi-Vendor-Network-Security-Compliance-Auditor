@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/assets/index-DF2fVbG5.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-mUG7dRI7.css">
+  <script type="module" crossorigin src="/assets/index-qpPUHRKi.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CtzXzZ81.css">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
     <div class="header-left">
       <div class="brand-badge">
         <div class="brand-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             <path d="m9 12 2 2 4-4"/>
           </svg>
@@ -29,24 +29,25 @@
         </div>
       </div>
       <div class="sih-pill">
-        <span class="sih-dot"></span> Smart India Hackathon 2026-27
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+        Smart India Hackathon 2026-27
       </div>
     </div>
 
     <div class="header-right">
       <div class="engine-status">
-        <span class="pulse-indicator"></span> Normalization Core Active
+        <span class="status-indicator"></span> Normalization Core Active
       </div>
       <button id="btn-export-pdf" class="btn btn-secondary" title="Download Executive Audit Report PDF">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Export PDF Report
       </button>
       <button id="btn-simulate-fix" class="btn btn-accent" title="Simulate 1-Click Remediation & Recalculate Compliance">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
         Simulate Auto-Fix
       </button>
       <button id="btn-run-audit" class="btn btn-primary" title="Execute Multi-Framework Audit">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
         Run Security Audit
       </button>
     </div>
@@ -55,67 +56,129 @@
   <!-- Ingestion Preset & Framework Selector Toolbar -->
   <section class="toolbar-section">
     <div class="toolbar-container">
-      <div class="preset-selector-group">
-        <span class="group-label">Quick Vendor Presets:</span>
+      
+      <!-- Row 1: Quick Vendor Presets -->
+      <div class="toolbar-row">
+        <div class="toolbar-label-col">
+          <svg class="toolbar-label-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="20" height="8" x="2" y="2" rx="2" ry="2"/>
+            <rect width="20" height="8" x="2" y="14" rx="2" ry="2"/>
+            <line x1="6" x2="6.01" y1="6" y2="6"/>
+            <line x1="6" x2="6.01" y1="18" y2="18"/>
+          </svg>
+          <span class="toolbar-label-text">Quick Vendor Presets:</span>
+        </div>
+        <div class="toolbar-divider"></div>
         <div class="preset-buttons" id="preset-buttons">
           <button class="preset-btn active" data-preset="cisco">Cisco Catalyst (IOS-XE)</button>
           <button class="preset-btn" data-preset="juniper">Juniper SRX (JunOS)</button>
           <button class="preset-btn" data-preset="fortinet">Fortinet FortiGate (FortiOS)</button>
           <button class="preset-btn" data-preset="paloalto">Palo Alto (PAN-OS)</button>
-          <button class="preset-btn special" data-preset="whitebox">WhiteBox Switch (Adaptive Demo ⭐)</button>
+          <button class="preset-btn adaptive-mode-btn" data-preset="whitebox">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 9 6 6m0-6-6 6"/></svg>
+            WhiteBox SONiC (Adaptive Mode)
+          </button>
         </div>
       </div>
 
-      <div class="framework-selector-group">
-        <span class="group-label">Evaluated Frameworks:</span>
-        <label class="framework-checkbox"><input type="checkbox" value="CIS" checked> CIS Benchmarks v2.0</label>
-        <label class="framework-checkbox"><input type="checkbox" value="NIST" checked> NIST CSF 2.0</label>
-        <label class="framework-checkbox"><input type="checkbox" value="DISA_STIG" checked> DISA STIGs</label>
-        <label class="framework-checkbox"><input type="checkbox" value="ISO_27001" checked> ISO/IEC 27001</label>
+      <!-- Row 2: Evaluated Frameworks -->
+      <div class="toolbar-row">
+        <div class="toolbar-label-col">
+          <svg class="toolbar-label-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+          <span class="toolbar-label-text">Evaluated Frameworks:</span>
+        </div>
+        <div class="toolbar-divider"></div>
+        <div class="framework-selector-group">
+          <label class="framework-checkbox"><input type="checkbox" value="CIS" checked> CIS Benchmarks v2.0</label>
+          <label class="framework-checkbox"><input type="checkbox" value="NIST" checked> NIST CSF 2.0</label>
+          <label class="framework-checkbox"><input type="checkbox" value="DISA_STIG" checked> DISA STIGs</label>
+          <label class="framework-checkbox"><input type="checkbox" value="ISO_27001" checked> ISO/IEC 27001</label>
+        </div>
       </div>
+
     </div>
   </section>
 
-  <!-- Main Workstation Layout -->
-  <main class="workstation-container">
+  <!-- Main Workstation Layout with Draggable Resizer -->
+  <main class="workstation-container" id="workstation-container">
     
     <!-- Left Column: Raw Configuration Workspace -->
-    <section class="config-panel">
+    <section class="config-panel" id="config-panel">
+      <!-- Clean, Professional Header -->
       <div class="panel-header">
-        <div class="panel-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          Ingested Raw Configuration
+        <div class="panel-title-area">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="4 17 10 11 4 5"/>
+            <line x1="12" y1="19" x2="20" y2="19"/>
+          </svg>
+          <span class="panel-title-text">Raw Configuration Stream</span>
         </div>
-        <div class="device-meta-badges">
-          <span class="meta-tag" id="meta-vendor">Vendor: Cisco</span>
-          <span class="meta-tag" id="meta-model">Model: Catalyst 9300</span>
-          <span class="meta-tag" id="meta-lines">Lines: 35</span>
+        <div class="panel-actions-area">
+          <button id="btn-fullscreen-editor" class="btn-icon" title="Toggle Fullscreen View">
+            <svg class="icon-maximize" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+            </svg>
+            <svg class="icon-minimize" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+              <path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M10 4v6m0 0H4m6 0L3 3m10 7h6m-6 0V4m0 6l7-7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Strictly Aligned Metadata Strip -->
+      <div class="panel-meta-strip">
+        <div class="meta-item">
+          <span class="meta-key">VENDOR</span>
+          <span class="meta-val" id="meta-vendor">Cisco</span>
+        </div>
+        <div class="meta-divider"></div>
+        <div class="meta-item">
+          <span class="meta-key">DEVICE</span>
+          <span class="meta-val" id="meta-model">Catalyst 2960 / 9300</span>
+        </div>
+        <div class="meta-divider"></div>
+        <div class="meta-item">
+          <span class="meta-key">BUFFER</span>
+          <span class="meta-val" id="meta-lines">38 Lines</span>
         </div>
       </div>
 
       <div class="config-editor-wrapper">
+        <div class="scanner-laser" id="scanner-laser"></div>
         <div class="line-numbers" id="line-numbers"></div>
         <textarea id="raw-config-editor" spellcheck="false" placeholder="Paste network CLI configuration here..."></textarea>
       </div>
 
       <div class="editor-footer">
         <div class="footer-hint">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          Supports Cisco, Juniper, Fortinet, Palo Alto, Arista, and Disaggregated SONiC.
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Parses Cisco, Juniper, Fortinet, Palo Alto, Arista, and Whitebox SONiC.
         </div>
-        <button id="btn-clear-config" class="btn-text">Clear Editor</button>
+        <button id="btn-clear-config" class="btn-text">Clear Buffer</button>
       </div>
     </section>
+
+    <!-- Draggable Resizer Handle -->
+    <div class="panel-resizer" id="panel-resizer" title="Click and drag horizontally to resize code view"></div>
 
     <!-- Right Column: Audit Results & Adaptive Loop -->
     <section class="results-panel">
       
-      <!-- Executive Overview Card -->
+      <!-- Executive Overview Card with Mathematically Accurate Radial Gauge -->
       <div class="executive-score-card">
         <div class="score-circle-wrapper">
-          <div class="score-circle" id="overall-score-circle">
-            <span class="score-val" id="overall-score-val">0%</span>
-            <span class="score-lbl">Compliance</span>
+          <div class="score-gauge-container">
+            <svg class="score-gauge-svg" viewBox="0 0 100 100">
+              <circle class="gauge-bg" cx="50" cy="50" r="40"/>
+              <circle class="gauge-progress red" id="gauge-progress-bar" cx="50" cy="50" r="40"/>
+            </svg>
+            <div class="score-inner-content">
+              <span class="score-val" id="overall-score-val">0%</span>
+              <span class="score-lbl">COMPLIANCE</span>
+            </div>
           </div>
         </div>
 
@@ -134,7 +197,7 @@
           </div>
           <div class="metric-box">
             <div class="metric-val text-blue" id="remediation-coverage">100%</div>
-            <div class="metric-lbl">Fixes Synthesized</div>
+            <div class="metric-lbl">Remediation Coverage</div>
           </div>
         </div>
       </div>
@@ -152,7 +215,7 @@
         <button class="tab-btn" data-tab="tab-csm">
           Common Security Model (CSM)
         </button>
-        <button class="tab-btn highlight" data-tab="tab-adaptive">
+        <button class="tab-btn" data-tab="tab-adaptive">
           Adaptive Training Studio <span class="gap-count-pill" id="gaps-count-badge">0</span>
         </button>
       </div>
@@ -192,11 +255,11 @@
         <div class="tab-pane" id="tab-adaptive">
           <div class="adaptive-banner">
             <div class="adaptive-banner-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
             </div>
             <div>
               <div class="adaptive-banner-title">Human-in-the-Loop Dynamic Learning Engine</div>
-              <div class="adaptive-banner-desc">When the parser encounters unfamiliar tokens from new firmware or custom whitebox switches, administrators map the parameter once. The engine updates its heuristics permanently without code deployment!</div>
+              <div class="adaptive-banner-desc">When encountering unfamiliar tokens from novel firmware or whitebox hardware, administrators map the parameter once. The engine updates its heuristics permanently without code deployment or restart.</div>
             </div>
           </div>
 

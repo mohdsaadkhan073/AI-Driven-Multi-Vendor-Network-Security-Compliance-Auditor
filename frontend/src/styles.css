@@ -46,15 +46,22 @@
   padding: 0;
 }
 
+html, body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-main);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* Header */
@@ -65,8 +72,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky;
-  top: 0;
+  flex-shrink: 0;
   z-index: 50;
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
 }
@@ -212,6 +218,7 @@ body {
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border-medium);
   padding: 10px 24px;
+  flex-shrink: 0;
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
 }
 
@@ -375,9 +382,9 @@ body {
   display: grid;
   grid-template-columns: var(--config-panel-width, 480px) 8px 1fr;
   flex: 1;
-  overflow: hidden;
-  height: calc(100vh - 146px);
   min-height: 0;
+  height: 100%;
+  overflow: hidden;
   position: relative;
 }
 
@@ -404,6 +411,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
   overflow: hidden;
   position: relative;
   box-shadow: 2px 0 10px rgba(15, 23, 42, 0.05);
@@ -520,6 +528,7 @@ body {
 .config-editor-wrapper {
   display: flex;
   flex: 1;
+  min-height: 0;
   position: relative;
   overflow: hidden;
   background: #0B0F19;
@@ -567,6 +576,7 @@ body {
 
 #raw-config-editor {
   flex: 1;
+  height: 100%;
   background: transparent;
   color: #F8FAFC;
   font-family: 'JetBrains Mono', monospace;
@@ -577,18 +587,20 @@ body {
   outline: none;
   resize: none;
   white-space: pre;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: auto;
   tab-size: 2;
 }
 
 .editor-footer {
-  padding: 6px 16px;
+  padding: 8px 16px;
   border-top: 1px solid var(--border-medium);
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #FFFFFF;
   flex-shrink: 0;
+  height: 38px;
 }
 
 .footer-hint {
@@ -604,7 +616,9 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 16px 24px;
   gap: 16px;
   background: var(--bg-primary);
