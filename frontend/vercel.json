@@ -1,5 +1,9 @@
-{
+﻿{
   "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://ai-driven-multi-vendor-network-security-vlog.onrender.com/api/:path*"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
